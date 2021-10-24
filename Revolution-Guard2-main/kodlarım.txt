@@ -1,0 +1,155 @@
+
+client.on("channelUpdate", async (oldChannel, newChannel) => {
+    let arr = []
+    newChannel.guild.fetchAuditLogs({ type: "CHANNEL_UPDATE" }).then(async (audit) => {
+        let ayar = audit.entries.first()
+        let hedef = ayar.target
+        let yapan = ayar.executor
+        if (yapan.id == client.user.id) return
+        if (oldChannel.permissionOverwrites !== newChannel.permissionOverwrites) {
+            if (!newChannel.permissionOverwrites.type == "role") return
+            oldChannel.permissionOverwrites.filter(p => p.type === 'role').forEach(perm => {
+                const role = newChannel.guild.roles.cache.get(perm.id);
+                if (role) {
+                    arr.push({
+                        role: role.id,
+                        allow: perm.allow.bitfield,
+                        deny: perm.deny.bitfield
+                    });
+                }
+            })
+                let tok = new Discord.Permissions(arr[0].allow).toArray();
+                let toku = new Discord.Permissions(arr[0].deny).toArray();
+                let obj = {};
+                let objd = {};
+                for (let i = 0; i < tok.length; i++) {
+                    let x = tok.reduce((key, value) => {
+                        return {
+                            [tok[i]]: true
+                        };
+                    });
+                    Object.assign(obj, x);
+                }
+
+                for (let i = 0; i < toku.length; i++) {
+                    let x = toku.reduce((key, value) => {
+                        return {
+                            [toku[i]]: false
+                        };
+                    });
+                    Object.assign(objd, x);
+                }
+                let permissions = Object.assign(obj, objd);
+                await newChannel.createOverwrite(arr[0].role, permissions);
+                console.log(arr)
+        }
+    })
+});
+
+              /*let arr = []
+        oldChannel.permissionOverwrites.map(x => {
+          arr.push({
+            id: x.id,
+            deny: new Discord.Permissions(x.deny.bitfield).toArray(),
+            allow: new Discord.Permissions(x.allow.bitfield).toArray()
+          })
+        })
+        if(!client.kanalKoruma.has(newChannel.id)) {
+          client.kanalKoruma.set(newChannel.id, arr)
+        }
+        let izinler = client.kanalKoruma.get(newChannel.id)
+        if(oldChannel.permissionOverwrites == newChannel.permissionOverwrites) return
+        newChannel.overwritePermissions(izinler)
+      }*/
+
+client.on("channelUpdate", async (oldChannel, newChannel) => {
+    newChannel.guild.fetchAuditLogs({ type: "CHANNEL_OVERWRITE_UPDATE" }).then(async (audit) => {
+        let ayar = audit.entries.first()
+        let hedef = ayar.target
+        let yapan = ayar.executor
+        if (yapan.id == client.user.id) return
+        if (oldChannel.permissionOverwrites !== newChannel.permissionOverwrites) {
+            if (newChannel.permissionOverwrites.type == "role") return
+            newChannel.permissionOverwrites.filter(p => p.type === 'member').forEach(perm => {
+                newChannel.permissionOverwrites.get(perm.id).delete();
+            })
+        }
+    })
+});
+
+
+client.on("guildMemberUpdate", async (oldMember, newMember) => {
+    newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" }).then(async (audit) => {
+        let ayar = audit.entries.first()
+        let hedef = ayar.target
+        let yapan = ayar.executor
+        if (hedef.id != newMember.id) return
+        newMember.roles.cache.forEach(async role => {
+            if (!oldMember.roles.cache.has(role.id)) {
+                let num = rol.get(hedef.id) || 0
+                let numx = yapan.get(yapan.id) || 0
+                rol.set(hedef.id, num + 1)
+                yapan.set(yapan.id, numx + 1)
+                let kontrol = rol.get(hedef.id)
+                if (kontrol == 1) {
+                    let arr = []
+                    arr.push(role.id)
+                    roller.set(hedef.id, arr)
+                } else if (kontrol == 2) {
+                    let arruy = roller.get(hedef.id)
+                    arruy.push(role.id)
+                    roller.set(hedef.id, arruy)
+                } else if (kontrol == 3) {
+                    let arruy = roller.get(hedef.id)
+                    arruy.push(role.id)
+                    roller.set(hedef.id, arruy)
+                } else if (kontrol == 4) {
+                    let arruy = roller.get(hedef.id)
+                    arruy.push(role.id)
+                    roller.set(hedef.id, arruy)
+                } else if (kontrol == 5) {
+                    let arruy = roller.get(hedef.id)
+                    arruy.map(async (x) => {
+                        await newMember.roles.remove(x, "Spam rol koruması")
+                        await newMember.roles.remove(role, "Spam rol koruması")
+                        rol.delete(yapan.id)
+                        roller.delete(hedef.id)
+                        if (newMember.guild.members.cache.get(client.user.id).roles.highest.rawPosition > newMember.guild.members.cache.get(yapan.id).roles.highest.rawPosition) {
+                            await newMember.guild.members.ban(yapan.id, "Spam rol verme işleminde bulunma")
+                        }
+                    })
+                }
+                setTimeout(() => {
+                    if (rol.has(yapan.id)) {
+                        rol.delete(yapan.id)
+                    }
+                    if (roller.has(hedef.id)) {
+                        roller.delete(hedef.id)
+                    }
+                }, 60000)
+            }
+        });
+    })
+})
+
+client.on("roleCreate", async (role) => {
+    await role.guild.fetchAuditLogs({ type: "ROLE_DELETE" }).then(async (audit) => {
+        let ayar = audit.entries.first()
+        let yapan = ayar.executor
+        if (client.owners.includes(yapan.id)) return
+        if (Date.now() - ayar.createdTimestamp > 5000) return;
+        let limit = client.roleCreate.get(yapan.id) || [];
+        limit.push(role.id);
+        client.roleCreate.set(yapan.id, limit);
+        if (limit.length == 3) {
+        client.channels.cache.get("").send(`⛔ <@${yapan.id}> | (\`${yapan.id}\`) kişisi rol oluşturmaya çalıştığı için yasaklandı roller siliniyor! Açtığı roller \`\`\`${limit.map(x => role.guild.roles.cache.get(x).name).join("\n")}\`\`\``)
+        let arr = ["ADMINISTRATOR", "BAN_MEMBERS", "KICK_MEMBERS", "MANAGE_ROLES", "MANAGE_CHANNELS", "MANAGE_GUILD", "VIEW_AUDIT_LOG"]
+        role.guild.roles.cache.filter(a => arr.some(x => a.permissions.has(x)) == true && role.guild.members.cache.get(client.user.id).roles.highest.rawPosition > a.rawPosition && !client.botroles.includes(a.id)).map(huh => {
+           // client.roleBackup.set(huh.id, huh.permissions.bitfield)
+            huh.setPermissions(0)
+        })
+        await role.guild.members.ban(yapan.id, { reason: "Rol silmek" })
+        client.blackList.push(yapan.id)
+    }
+    })
+});

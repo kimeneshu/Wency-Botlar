@@ -1,0 +1,36 @@
+{
+  "name": "wency-newstat",
+  "version": "2.0.0",
+  "description": "Tokuchinin yeni altyapısı",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "discord-logs": "^1.7.7",
+    "discord.js": "^12.2.0",
+    "klaw": "^2.1.1",
+    "moment": "^2.26.0",
+    "moment-duration-format": "^2.3.2",
+    "mongoose": "^5.9.16",
+    "ms": "^2.1.2",
+    "pretty-ms": "^7.0.0",
+    "readline-sync": "^1.4.9",
+    "table": "^5.4.6"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^11.3.2",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.18.1",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0"
+  }
+}

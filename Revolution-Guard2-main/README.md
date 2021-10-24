@@ -1,0 +1,1 @@
+Wéncy'nin Yeni Guardı!
