@@ -2,4 +2,4 @@ Buyrun yalan yok Beni tokatladıgı için owoda 150milyon (1500 TL) Paylaştım 
 
 Normalde Kimseye zararım yoktur Arkadaş beni tokatlayıp Dalga geçince paylaşma geregi duydum <333
 
-NOT: EN AZ 100 STAR VE 80 SHARE İSTİYORUM DEVAMI İÇİN :))))))))))))))))
+NOT: EN AZ 100 STAR VE 80 FORK İSTİYORUM DEVAMI İÇİN :))))))))))))))))
